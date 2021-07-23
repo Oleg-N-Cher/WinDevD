@@ -1,0 +1,1 @@
+-Zpe -D_WIN32 -O1 -s -I "." -I ..\Lib -I ..\Lib\Mod -I ..\Lib\Obj -I ..\Bin\DJGPP\include\win32 ..\Bin\DJGPP\lib\libmsvcrt.a ..\Bin\DJGPP\lib\libgdi32.a ..\Bin\DJGPP\lib\libadvapi32.a ..\Bin\DJGPP\lib\libshell32.a

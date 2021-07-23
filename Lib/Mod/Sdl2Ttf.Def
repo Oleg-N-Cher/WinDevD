@@ -1,0 +1,75 @@
+(* Библиотека должна быть 32-битная, иначе пускач не найдёт её! *)
+MODULE Sdl2Ttf ["SDL2_TTF.DLL"];
+	(*
+	http://svn.freepascal.org/cgi-bin/viewvc.cgi/trunk/packages/sdl/src/sdl_ttf.pas?revision=16205&view=co
+	*)
+
+	IMPORT T := Sdl2CTypes, SYSTEM;
+
+	CONST
+		(* Set and retrieve the font style
+		This font style is implemented by modifying the font glyphs, and
+		doesn't reflect any inherent properties of the truetype font file. *)
+		TTF_STYLE_NORMAL = 00H;
+		TTF_STYLE_BOLD = 01H;
+		TTF_STYLE_ITALIC = 02H;
+		TTF_STYLE_UNDERLINE = 04H;
+
+		(* ZERO WIDTH NO-BREAKSPACE (Unicode byte order mark) *)
+		UNICODE_BOM_NATIVE = 0FEFFH;
+		UNICODE_BOM_SWAPPED = 0FFFEH;
+
+	TYPE
+		PTTF_Font* = POINTER [untagged] TO TTF_Font;
+		TTF_Font* = RECORD  [untagged]
+		END;
+
+		(* 
+		замена C-типов: 
+		const char *title на title: T.pchar
+		*)
+		
+		PROCEDURE [ccall] Linked_Version* ["TTF_Linked_Version"] (): T.PSDL_version;
+		PROCEDURE [ccall] ByteSwappedUNICODE* ["TTF_ByteSwappedUNICODE"] (swapped: T.int);
+		PROCEDURE [ccall] Init* ["TTF_Init"] (): T.int;
+		PROCEDURE [ccall] OpenFont* ["TTF_OpenFont"] (filename: T.pchar; ptsize: T.int): PTTF_Font;
+		PROCEDURE [ccall] OpenFontIndex* ["TTF_OpenFont"] (filename: T.pchar; ptsize: T.int; index: T.long): PTTF_Font;
+
+		(* 15.05.2014 22:21 вариантная запись, отложил на потом *)
+		(* PROCEDURE [ccall] OpenFontRW* ["TTF_OpenFontRW"] (src: PSDL_RWops; freesrc: T.int; ptsize: T.int): PTTF_Font; *)
+		(* PROCEDURE [ccall] OpenFontIndexRW* ["TTF_OpenFontIndexRW"] (src: PSDL_RWops; freesrc : T.int; ptsize: T.int; index: T.int): PTTF_Font; *)
+		
+		PROCEDURE [ccall] GetFontStyle* ["TTF_GetFontStyle"] (font: PTTF_Font): T.int;
+		PROCEDURE [ccall] SetFontStyle* ["TTF_SetFontStyle"] (font: PTTF_Font; style: T.int);
+		PROCEDURE [ccall] FontHeight* ["TTF_FontHeight"] (font: PTTF_Font): T.int;
+		PROCEDURE [ccall] FontAscent* ["TTF_FontAscent"] (font: PTTF_Font): T.int;
+		PROCEDURE [ccall] FontDescent* ["TTF_FontDescent"] (font: PTTF_Font): T.int;
+		PROCEDURE [ccall] FontLineSkip* ["TTF_FontLineSkip"] (font: PTTF_Font): T.int;
+		PROCEDURE [ccall] FontFaces* ["TTF_FontFaces"] (font: PTTF_Font): T.int;
+		PROCEDURE [ccall] FontFaceIsFixedWidth* ["TTF_FontFaceIsFixedWidth"] (font: PTTF_Font): T.pchar;
+		PROCEDURE [ccall] FontFaceFamilyName* ["TTF_FontFaceFamilyName"] (font: PTTF_Font): T.pchar;
+		PROCEDURE [ccall] FontFaceStyleName* ["TTF_FontFaceStyleName"] (font: PTTF_Font): T.pchar;
+		PROCEDURE [ccall] GlyphMetrics* ["TTF_GlyphMetrics"] (font: PTTF_Font; ch: T.Uint16; VAR minx, maxx, miny, maxy, advance: T.int): T.int;
+		PROCEDURE [ccall] GlyphIsProvided* ["TTF_GlyphIsProvided"] (font: PTTF_Font; ch: T.Uint16): T.int;
+		PROCEDURE [ccall] SizeText* ["TTF_SizeText"] (font: PTTF_Font; text: T.pchar; VAR w, y: T.int): T.int;
+		PROCEDURE [ccall] SizeUTF8* ["TTF_SizeUTF8"] (font: PTTF_Font; text: T.pchar; VAR w, y: T.int): T.int;
+		PROCEDURE [ccall] SizeUNICODE* ["TTF_SizeUNICODE"] (font: PTTF_Font; text: T.PUint16; VAR w, y: T.int): T.int;
+		PROCEDURE [ccall] RenderText_Solid* ["TTF_RenderText_Solid"] (font: PTTF_Font; text: T.pchar; fg: T.Color): T.PSurface;
+		PROCEDURE [ccall] RenderUTF8_Solid* ["TTF_RenderUTF8_Solid"] (font: PTTF_Font; text: T.pchar; fg: T.Color): T.PSurface;
+		PROCEDURE [ccall] RenderUNICODE_Solid* ["TTF_RenderUNICODE_Solid"] (font: PTTF_Font; text: T.PUint16; fg: T.Color): T.PSurface;
+		PROCEDURE [ccall] RenderGlyph_Solid* ["TTF_RenderGlyph_Solid"] (font: PTTF_Font; text: T.PUint16; fg: T.Color): T.PSurface;
+		PROCEDURE [ccall] RenderText_Shaded* ["TTF_RenderText_Shaded"] (font: PTTF_Font; text: T.pchar; fg, bg: T.Color): T.PSurface;
+		PROCEDURE [ccall] RenderUTF8_Shaded* ["TTF_RenderUTF8_Shaded"] (font: PTTF_Font; text: T.pchar; fg, bg: T.Color): T.PSurface;
+		PROCEDURE [ccall] RenderUNICODE_Shaded* ["TTF_RenderUNICODE_Shaded"] (font: PTTF_Font; text: T.PUint16; fg, bg: T.Color): T.PSurface;
+		PROCEDURE [ccall] RenderGlyph_Shaded* ["RenderGlyph_Shaded"] (font: PTTF_Font; ch: T.PUint16; fg, bg: T.Color): T.PSurface;
+		PROCEDURE [ccall] RenderText_Blended* ["TTF_RenderText_Blended"] (font: PTTF_Font; text: T.pchar; fg: T.Color): T.PSurface;
+		PROCEDURE [ccall] RenderUTF8_Blended* ["TTF_RenderUTF8_Blended"] (font: PTTF_Font; text: T.pchar; fg: T.Color): T.PSurface;
+		PROCEDURE [ccall] RenderUNICODE_Blended* ["TTF_RenderUNICODE_Blended"] (font: PTTF_Font; text: T.PUint16; fg: T.Color): T.PSurface;
+		PROCEDURE [ccall] RenderGlyph_Blended* ["TTF_RenderGlyph_Blended"] (font: PTTF_Font; ch: T.PUint16; fg: T.Color): T.PSurface;
+		PROCEDURE [ccall] CloseFont* ["TTF_CloseFont"] (font: PTTF_Font);
+		PROCEDURE [ccall] Quit* ["TTF_Quit"] ();
+		PROCEDURE [ccall] WasInit* ["TTF_WasInit"] (): T.int;
+
+PROCEDURE -_init* "/*-noinit*/";
+
+END Sdl2Ttf.

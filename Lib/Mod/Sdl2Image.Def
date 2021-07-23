@@ -1,0 +1,93 @@
+(* Библиотека должна быть 32-битная, иначе пускач не найдёт её! *)
+MODULE Sdl2Image (* SDL2_IMAGE.DLL *);
+
+(**
+	project	= "Sdl2ImageWin, based on SDL binding  by Oleg N. Cher"
+	organization	= ""
+	contributors	= ""
+	version	= "System/Rsrc/About"
+	copyright	= ""
+	license	= "Docu/BB-License"
+	purpose	= ""
+	changes	= "
+	- 20150225, , автогенерация заголовка
+"
+	issues	= ""
+**)
+
+	IMPORT T := Sdl2Lib, SYSTEM;
+
+	CONST
+		INIT_JPG* = BITS(0H);
+		INIT_PNG* = BITS(1H);
+		INIT_TIF* = BITS(2H);
+(*
+	PROCEDURE [1] Linked_Version* ["IMG_Linked_Version"] (): T.PSDL_version;
+*)
+	PROCEDURE [1] Init* ["IMG_Init"] (flags: T.Uint32): T.int;
+	PROCEDURE [1] Quit* ["IMG_Quit"] ();
+
+(* Load an image from an SDL data source. The 'type' may be one of: "BMP", "GIF", "PNG", etc.
+If the image format supports a transparent pixel, SDL will set the colorkey for the surface.  You can enable RLE acceleration on the surface afterwards by calling: SDL_SetColorKey(image, SDL_RLEACCEL, image->format->colorkey);
+*)
+	PROCEDURE [ccall] LoadTyped_RW* ["IMG_LoadTyped_RW"] (src: T.PRWops; freeSrc: T.int; type: T.pchar): T.PSurface;
+
+	(* Convenience functions *)
+	PROCEDURE [ccall] Load* ["IMG_Load"] (file: T.pchar): T.PSurface;
+
+	PROCEDURE [ccall] LoadRW* ["IMG_Load_RW"] (src: T.PRWops; freeSrc: T.int): T.PSurface;
+	PROCEDURE [ccall] Load_RW* ["IMG_Load_RW"] (src: T.PRWops; freeSrc: T.int): T.PSurface;
+
+	(* Functions to detect a file type, given a seekable source *)
+	PROCEDURE [ccall] IsICO* ["IMG_isICO"] (src: T.PRWops): T.int;
+	PROCEDURE [ccall] IsCUR* ["IMG_isCUR"] (src: T.PRWops): T.int;
+	PROCEDURE [ccall] IsBMP* ["IMG_isBMP"] (src: T.PRWops): T.int;
+	PROCEDURE [ccall] IsGIF* ["IMG_isGIF"] (src: T.PRWops): T.int;
+	PROCEDURE [ccall] IsJPG* ["IMG_isJPG"] (src: T.PRWops): T.int;
+	PROCEDURE [ccall] IsLBM* ["IMG_isLBM"] (src: T.PRWops): T.int; 
+	PROCEDURE [ccall] IsPCX* ["IMG_isPCX"] (src: T.PRWops): T.int;
+	PROCEDURE [ccall] IsPNG* ["IMG_isPNG"] (src: T.PRWops): T.int;
+	PROCEDURE [ccall] IsPNM* ["IMG_isPNM"] (src: T.PRWops): T.int;
+	PROCEDURE [ccall] IsTIF* ["IMG_isTIF"] (src: T.PRWops): T.int;
+	PROCEDURE [ccall] IsXCF* ["IMG_isXCF"] (src: T.PRWops): T.int;
+	PROCEDURE [ccall] IsXPM* ["IMG_isXPM"] (src: T.PRWops): T.int;
+	PROCEDURE [ccall] IsXV* ["IMG_isXV"] (src: T.PRWops): T.int;
+
+	(* Individual loading functions *)
+	PROCEDURE [ccall] LoadICORW* ["IMG_LoadICO_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadICO_RW* ["IMG_LoadICO_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadCURRW* ["IMG_LoadCUR_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadCUR_RW* ["IMG_LoadCUR_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadBMPRW* ["IMG_LoadBMP_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadBMP_RW* ["IMG_LoadBMP_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadGIFRW* ["IMG_LoadGIF_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadGIF_RW* ["IMG_LoadGIF_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadJPGRW* ["IMG_LoadJPG_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadJPG_RW* ["IMG_LoadJPG_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadLBMRW* ["IMG_LoadLBM_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadLBM_RW* ["IMG_LoadLBM_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadPCXRW* ["IMG_LoadPCX_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadPCX_RW* ["IMG_LoadPCX_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadPNGRW* ["IMG_LoadPNG_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadPNG_RW* ["IMG_LoadPNG_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadPNMRW* ["IMG_LoadPNM_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadPNM_RW* ["IMG_LoadPNM_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadTGARW* ["IMG_LoadTGA_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadTGA_RW* ["IMG_LoadTGA_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadTIFRW* ["IMG_LoadTIF_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadTIF_RW* ["IMG_LoadTIF_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadXCFRW* ["IMG_LoadXCF_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadXCF_RW* ["IMG_LoadXCF_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadXPMRW* ["IMG_LoadXPM_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadXPM_RW* ["IMG_LoadXPM_RW"] (src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadXVRW* ["IMG_LoadXV_RW"]	(src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] LoadXV_RW* ["IMG_LoadXV_RW"]	(src: T.PRWops): T.PSurface;
+	PROCEDURE [ccall] ReadXPMFromArray* ["IMG_ReadXPMFromArray"] (VAR [nil] xpm: T.pchar): T.PSurface;
+
+	(* used T.internally, NOT an exported function *)
+	PROCEDURE [ccall] StringEquals* ["IMG_string_equals"] (str1, str2: T.pchar): T.int;
+	PROCEDURE [ccall] String_equals* ["IMG_string_equals"] (str1, str2: T.pchar): T.int;
+
+PROCEDURE -_init* "/*-noinit*/";
+
+END Sdl2Image.
